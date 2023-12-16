@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.EditText
 import android.widget.ListView
 import androidx.appcompat.app.AlertDialog
 
@@ -23,12 +24,29 @@ class MainActivity : AppCompatActivity() {
         lv.adapter = adapter
 
         btnAdd.setOnClickListener {
+
+            val et = EditText(this)
+
             AlertDialog.Builder(this)
                 .setTitle("Add Todo")
                 .setMessage("Fight!")
-                .setPositiveButton("Add",null)
+                .setView(et)
+                .setPositiveButton("Add") { _, _ ->
+                    val myTodo = et.text.toString()
+                    adapter.add(myTodo)
+                }
                 .setNegativeButton("Cancel", null)
                 .show()
+        }
+        
+        lv.setOnItemClickListener { _, _, i, _ ->
+             AlertDialog.Builder(this)
+                 .setTitle("Delete Todo?")
+                 .setPositiveButton("Yes") { _, _ ->
+                    adapter.remove(adapter.getItem(i))
+                 }
+                 .setNegativeButton("No", null)
+                 .show()
         }
     }
 }
